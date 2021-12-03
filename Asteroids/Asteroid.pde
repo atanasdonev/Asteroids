@@ -20,7 +20,7 @@ class Asteroid extends GameObject {
   void collide() {
     float d = this.location.dist(ship.location);
     if (d < this.diameter/2 + ship.diameter/2) {
-      gameState = false;
+      gameState = 2;
       println("dead");
     }
   }//end collide

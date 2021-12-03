@@ -8,7 +8,7 @@ ArrayList<Asteroid> asteroidsToRemove;
 ArrayList<Asteroid> asteroidsToAdd;
 ArrayList<Asteroid> asteroids;
 
-boolean gameState;
+int gameState;
 int score;
 float gameTime;
 
@@ -17,7 +17,7 @@ void setup() {
   ship = new Ship(new PVector(width/2, height/2), new PVector(0, 0), 55);
   bullet = new Bullet(new PVector(ship.location.x, ship.location.y), new PVector(ship.direction.x, ship.direction.y), 10);
   asteroids = new ArrayList<Asteroid>();
-  gameState = true;
+  gameState = 0;
   asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
   asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
   asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
@@ -29,8 +29,26 @@ void draw() {
   asteroidsToAdd = new ArrayList<Asteroid>();
   asteroidsToRemove = new ArrayList<Asteroid>();
 
+  //main menu
+  if (gameState == 0) {
+    textAlign(CENTER, BOTTOM);
+    text("Asteroids", width/2, height/2 - 50);
+    textSize(24);
+    text("Press enter to start.", width/2, height/2 + 50);
+    text("Controls", width/2, height/2 + 150);
+    text("~", width/2, height/2 + 175);
+    textAlign(LEFT, BOTTOM);
+    text("Move Forward", width / 2 - 400, height / 2 + 200);
+    text("Up Arrow", width/2 + 200, height/2 + 200);
+    text("Turn Left", width / 2 - 400, height / 2 + 225);
+    text("Left Arrow", width / 2 + 200, height/2 + 225);
+    text("Turn Right", width / 2 - 400, height / 2 + 250);
+    text("Right Arrow", width/2 + 200, height/2 + 250);
+    text("Shoot", width / 2 - 400, height / 2 + 275);
+    text("Space", width/2 + 200, height/2 + 275);
+  }
   //playing game
-  if (gameState) {
+  else if (gameState == 1) {
     for (Asteroid a : asteroids) {
       a.display();
       a.update();
@@ -66,7 +84,8 @@ void draw() {
     textAlign(RIGHT, TOP);
     textSize(24);
     text("Score: " + score, width - 100, 20);
-  } else if (gameState == false) {
+  } //game over screen
+  else if (gameState == 2) {
     fill(255);
     textAlign(CENTER, BOTTOM);
     text("GAME OVER", width/2, height/2 - 50);
@@ -87,16 +106,18 @@ void keyPressed() {
   if (keyCode == LEFT) leftKey = true;
   if (keyCode == RIGHT) rightKey = true;
   if (keyCode == ' ') spaceKey = true;
+  
+  if (gameState == 0 || gameState == 2) {
+    if (keyCode == ENTER ) {
+      ship = new Ship(new PVector(width/2, height/2), new PVector(0, 0), 55);
+      asteroids = new ArrayList<Asteroid>();
 
-  if (keyCode == ENTER) {
-    ship = new Ship(new PVector(width/2, height/2), new PVector(0, 0), 55);
-    asteroids = new ArrayList<Asteroid>();
+      asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
+      asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
+      asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
 
-    asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
-    asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
-    asteroids.add(new Asteroid(new PVector(random(0, width), random(0, height)), new PVector(0, 2), 100));
-
-    gameState = true;
+      gameState = 1;
+    }
   }
 }//end keyPressed
 
